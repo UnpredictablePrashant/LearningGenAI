@@ -32,6 +32,8 @@ This repo takes you from "I've used ChatGPT" to "I understand how this works and
 | 02 | [Prompt Engineering](./sessions/02_prompt_engineering/) | `anthropic` | Yes | ✅ Available |
 | 03 | [Local LLMs with Ollama](./sessions/03_local_llms_ollama/) | `ollama`, `requests` | No (local) | ✅ Available |
 | 04 | [Tool Calling (Function Calling)](./sessions/04_tool_calling_function_calling/) | `openai`, `ollama` | Depends on provider | ✅ Available |
+| 05 | [MCP Servers with FastMCP](./sessions/05_mcp_servers/) | `fastmcp`, `mcp` | No | ✅ Available |
+| 06 | [Memory Management in Agentic AI](./sessions/06_memory_management_agentic_ai/) | Python standard library | No | ✅ Available |
 
 ---
 
@@ -100,6 +102,7 @@ cp .env.example .env
 Optional local path:
 - Session 03 runs fully local with Ollama.
 - Session 04 can also run locally through Ollama's OpenAI-compatible `/v1` endpoint.
+- Sessions 05 and 06 do not require API keys for the included labs and demos.
 
 ---
 
