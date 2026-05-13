@@ -115,6 +115,7 @@ Each layer shapes the output. Together they form a prompt that behaves like a de
 
 ## What's Next
 
-**Session 03 — RAG & Vector Databases** teaches you to give the model access to your private knowledge: runbooks, wikis, incident history — without fine-tuning.
+**Session 03 — Local LLMs with Ollama** teaches you to run models locally.
+**Session 07 — RAG & Vector Databases** teaches you to give the model access to private knowledge: runbooks, wikis, and incident history without fine-tuning.
 
-→ See [../03_rag_and_vectordbs/README.md](../03_rag_and_vectordbs/README.md)
+→ See [../03_local_llms_ollama/README.md](../03_local_llms_ollama/README.md) and [../07_retrieval_augmented_generation/README.md](../07_retrieval_augmented_generation/README.md)

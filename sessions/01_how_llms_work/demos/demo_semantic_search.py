@@ -178,7 +178,7 @@ def main() -> None:
   This is why production search systems for runbooks, documentation,
   and incident knowledge use embeddings rather than full-text search.
 
-  In Session 03 (RAG & Vector Databases), you'll build a full
+  In Session 07 (RAG & Vector Databases), you'll build a full
   retrieval-augmented generation pipeline on top of this foundation.
 """)
 

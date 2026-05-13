@@ -128,6 +128,9 @@ def main() -> None:
         ("numpy", None),
         ("anthropic", None),
         ("openai", None),
+        ("pypdf", None),
+        ("langchain_text_splitters", "langchain-text-splitters"),
+        ("chromadb", None),
         ("dotenv", "python-dotenv"),
     ]
     for import_name, package_name in packages:

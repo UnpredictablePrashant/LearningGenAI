@@ -8,11 +8,15 @@ numpy>=1.26.0                  # Vector math
 
 # Session 02+ — Anthropic API key required (or use Ollama locally)
 anthropic>=0.40.0              # Claude API client
-openai>=1.40.0                 # Session 04: OpenAI + OpenAI-compatible clients (incl. Ollama /v1)
+openai>=1.40.0                 # Sessions 04 and 07: OpenAI + compatible clients
 
-# Session 03 — RAG & Vector Databases
-chromadb>=0.5.0                # Local vector database (no server needed)
+# Session 03 — Local LLMs
 ollama>=0.3.0                  # Local LLM client (requires Ollama running: https://ollama.com)
+
+# Session 07 — RAG & Vector Databases
+pypdf>=4.0.0                   # PDF text extraction
+langchain-text-splitters>=0.3.0 # Token-aware recursive text splitting
+chromadb>=0.5.0                # Local vector database (no server needed)
 
 # Session 05 — MCP Servers with FastMCP
 fastmcp>=2.0.0                 # FastMCP framework for building MCP servers

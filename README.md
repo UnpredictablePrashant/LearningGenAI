@@ -34,6 +34,7 @@ This repo takes you from "I've used ChatGPT" to "I understand how this works and
 | 04 | [Tool Calling (Function Calling)](./sessions/04_tool_calling_function_calling/) | `openai`, `ollama` | Depends on provider | ✅ Available |
 | 05 | [MCP Servers with FastMCP](./sessions/05_mcp_servers/) | `fastmcp`, `mcp` | No | ✅ Available |
 | 06 | [Memory Management in Agentic AI](./sessions/06_memory_management_agentic_ai/) | Python standard library | No | ✅ Available |
+| 07 | [Retrieval-Augmented Generation (RAG)](./sessions/07_retrieval_augmented_generation/) | `pypdf`, `tiktoken`, `sentence-transformers`, `chromadb`, `openai` | Optional | ✅ Available |
 
 ---
 
@@ -103,6 +104,7 @@ Optional local path:
 - Session 03 runs fully local with Ollama.
 - Session 04 can also run locally through Ollama's OpenAI-compatible `/v1` endpoint.
 - Sessions 05 and 06 do not require API keys for the included labs and demos.
+- Session 07 core labs run without API keys; the optional generated-answer demo can use `OPENAI_API_KEY`.
 
 ---
 
