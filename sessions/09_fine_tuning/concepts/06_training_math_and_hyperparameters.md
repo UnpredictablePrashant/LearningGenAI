@@ -1,4 +1,4 @@
-# 05. Training Math and Hyperparameters
+# 06. Training Math and Hyperparameters
 
 You do not need to implement backpropagation to use fine-tuning, but you should
 understand the knobs and failure modes.
@@ -150,4 +150,3 @@ effective_training_tokens = total_training_tokens * n_epochs
 3. Batch size controls update granularity.
 4. Learning rate controls update magnitude.
 5. Overfitting and underfitting are diagnosed with validation and holdout evals.
-

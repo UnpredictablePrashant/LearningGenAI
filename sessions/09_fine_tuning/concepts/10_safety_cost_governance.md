@@ -1,4 +1,4 @@
-# 09. Safety, Cost, and Governance
+# 10. Safety, Cost, and Governance
 
 Fine-tuning is a model supply chain. Data enters, a model artifact exits, and
 production behavior changes. Treat it with the same rigor as CI/CD.
@@ -103,4 +103,3 @@ The model should not decide permissions.
 3. Cost includes labeling and iteration, not only training.
 4. Version every artifact.
 5. Always keep rollback simple.
-

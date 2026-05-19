@@ -26,6 +26,7 @@ like an engineering workflow rather than a magic training button.
 ## What You'll Learn
 
 - Decide between prompt engineering, RAG, fine-tuning, and tool use
+- Explain weights, biases, parameters, logits, inference, training, checkpoints, adapters, and quantization from first principles
 - Understand what fine-tuning changes inside a model and what it does not
 - Design SFT datasets for style, schema, classification, extraction, and domain behavior
 - Validate JSONL training files before uploading them
@@ -69,15 +70,16 @@ Recommended previous sessions:
 ```
 09_fine_tuning/
 |-- concepts/
-|   |-- 01_what_is_fine_tuning.md
-|   |-- 02_when_to_finetune.md
-|   |-- 03_training_data_design.md
-|   |-- 04_data_formats_sft_dpo_rft.md
-|   |-- 05_training_math_and_hyperparameters.md
-|   |-- 06_openai_fine_tuning_workflow.md
-|   |-- 07_local_lora_qlora.md
-|   |-- 08_evaluation_deployment.md
-|   `-- 09_safety_cost_governance.md
+|   |-- 01_model_basics_before_fine_tuning.md
+|   |-- 02_what_is_fine_tuning.md
+|   |-- 03_when_to_finetune.md
+|   |-- 04_training_data_design.md
+|   |-- 05_data_formats_sft_dpo_rft.md
+|   |-- 06_training_math_and_hyperparameters.md
+|   |-- 07_openai_fine_tuning_workflow.md
+|   |-- 08_local_lora_qlora.md
+|   |-- 09_evaluation_deployment.md
+|   `-- 10_safety_cost_governance.md
 |-- labs/
 |   |-- lab01_dataset_design/
 |   |-- lab02_jsonl_validation/
@@ -85,6 +87,7 @@ Recommended previous sessions:
 |   |-- lab04_hyperparameter_planning/
 |   `-- lab05_finetune_job_spec/
 `-- demos/
+    |-- demo_model_basics.py
     |-- demo_dataset_builder.py
     |-- demo_eval_harness.py
     `-- demo_finetune_planner.py
@@ -104,6 +107,7 @@ Recommended previous sessions:
 
 | Demo | What it shows |
 |------|---------------|
+| `demo_model_basics.py` | Weights, bias, logits, softmax, inference, and simple quantization |
 | `demo_dataset_builder.py` | Build SFT JSONL records and inspect dataset quality |
 | `demo_eval_harness.py` | Run a small baseline eval before fine-tuning |
 | `demo_finetune_planner.py` | Create a safe fine-tuning job plan without calling an API |
@@ -114,11 +118,12 @@ Recommended previous sessions:
 cd sessions/09_fine_tuning
 
 # Read concepts first
-cat concepts/01_what_is_fine_tuning.md
-cat concepts/02_when_to_finetune.md
-cat concepts/03_training_data_design.md
+cat concepts/01_model_basics_before_fine_tuning.md
+cat concepts/02_what_is_fine_tuning.md
+cat concepts/04_training_data_design.md
 
 # Run demos
+python demos/demo_model_basics.py
 python demos/demo_dataset_builder.py
 python demos/demo_eval_harness.py
 python demos/demo_finetune_planner.py
@@ -135,8 +140,7 @@ python labs/lab05_finetune_job_spec/lab.py
 
 | Activity | Time |
 |----------|------|
-| Concepts | 110 min |
+| Concepts | 130 min |
 | 5 labs | 160 min |
-| Demos | 35 min |
-| **Total** | **~5 hours** |
-
+| Demos | 45 min |
+| **Total** | **~5.5 hours** |

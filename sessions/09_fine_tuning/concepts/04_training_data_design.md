@@ -1,4 +1,4 @@
-# 03. Training Data Design
+# 04. Training Data Design
 
 Training data is the main lever in fine-tuning. Bad examples teach bad behavior.
 More data does not fix unclear data.
@@ -150,4 +150,3 @@ For RFT or preference methods, the required dataset shape and effort differ.
 3. Include edge cases and refusal cases.
 4. Remove secrets and duplicate leakage.
 5. Improve data before tuning hyperparameters.
-

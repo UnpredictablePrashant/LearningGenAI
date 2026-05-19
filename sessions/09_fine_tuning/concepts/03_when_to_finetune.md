@@ -1,4 +1,4 @@
-# 02. When To Fine-Tune
+# 03. When To Fine-Tune
 
 Fine-tuning is powerful, but it is not the default answer to every model problem.
 Use it when the failure is behavioral and repeatable.
@@ -133,4 +133,3 @@ Fine-tune only when you can answer:
 2. RAG and tools are often better first choices.
 3. Evals must come before training.
 4. Do not train until you can describe the failure and success metric.
-

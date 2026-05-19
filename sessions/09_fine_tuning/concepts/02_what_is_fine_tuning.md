@@ -1,4 +1,4 @@
-# 01. What Is Fine-Tuning?
+# 02. What Is Fine-Tuning?
 
 Fine-tuning adapts a pretrained model to behave better for a specific task,
 style, domain, or output contract by training it on examples.
@@ -114,4 +114,3 @@ The engineering workflow:
 3. Training data quality matters more than dataset size.
 4. Use RAG for changing facts and citations.
 5. Treat a fine-tuned model as a deployable artifact with versioning and rollback.
-

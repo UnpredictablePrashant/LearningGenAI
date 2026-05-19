@@ -1,4 +1,4 @@
-# 08. Evaluation and Deployment
+# 09. Evaluation and Deployment
 
 Fine-tuning without evals is guessing. You need a baseline before training and a
 gate before deployment.
@@ -89,4 +89,3 @@ If production inputs drift, the fine-tuned model may degrade.
 3. Use task-specific metrics.
 4. Deploy gradually with rollback.
 5. Monitor drift and regressions.
-

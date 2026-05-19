@@ -1,4 +1,4 @@
-# 06. OpenAI Fine-Tuning Workflow
+# 07. OpenAI Fine-Tuning Workflow
 
 OpenAI fine-tuning is a hosted workflow:
 
@@ -120,4 +120,3 @@ Production config should store:
 3. Supported models and methods change, so check official docs.
 4. Job success is not product success.
 5. Deploy only after evals beat the baseline and safety checks pass.
-

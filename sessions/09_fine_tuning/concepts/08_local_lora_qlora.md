@@ -1,4 +1,4 @@
-# 07. Local Fine-Tuning, LoRA, and QLoRA
+# 08. Local Fine-Tuning, LoRA, and QLoRA
 
 Hosted fine-tuning is not the only path. Open-source workflows let you fine-tune
 local models using libraries such as Hugging Face Transformers, TRL, and PEFT.
@@ -115,4 +115,3 @@ If a run fails with out-of-memory:
 3. TRL SFTTrainer is a common local SFT workflow.
 4. Local APIs change quickly, so pin versions.
 5. Evaluate local fine-tunes with the same rigor as hosted fine-tunes.
-

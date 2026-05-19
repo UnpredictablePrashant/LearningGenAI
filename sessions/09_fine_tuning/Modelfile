@@ -1,0 +1,15 @@
+FROM qwen2.5:0.5b
+ADAPTER ./number-pattern-lora
+
+PARAMETER temperature 0.2
+PARAMETER top_p 0.9
+PARAMETER num_ctx 2048
+
+SYSTEM """
+You answer number questions in a fixed format:
+Number:
+Parity:
+Double:
+Square:
+Simple explanation:
+"""

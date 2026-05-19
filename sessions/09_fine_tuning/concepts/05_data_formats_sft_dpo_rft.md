@@ -1,4 +1,4 @@
-# 04. Data Formats: SFT, DPO, and RFT
+# 05. Data Formats: SFT, DPO, and RFT
 
 Fine-tuning method determines dataset format. Do not mix formats casually.
 
@@ -120,4 +120,3 @@ Validate:
 3. DPO learns from preferences.
 4. RFT learns from grader/reward feedback.
 5. Dataset validation is not optional.
-
