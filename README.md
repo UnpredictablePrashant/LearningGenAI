@@ -36,6 +36,7 @@ This repo takes you from "I've used ChatGPT" to "I understand how this works and
 | 06 | [Memory Management in Agentic AI](./sessions/06_memory_management_agentic_ai/) | Python standard library | No | ✅ Available |
 | 07 | [Retrieval-Augmented Generation (RAG)](./sessions/07_retrieval_augmented_generation/) | `pypdf`, `tiktoken`, `sentence-transformers`, `chromadb`, `openai` | Optional | ✅ Available |
 | 08 | [Agent2Agent (A2A) Protocol](./sessions/08_agent2agent_a2a_protocol/) | Python standard library | No | ✅ Available |
+| 09 | [Fine-Tuning LLMs](./sessions/09_fine_tuning/) | Python standard library, `openai` optional | Optional | ✅ Available |
 
 ---
 
@@ -106,6 +107,7 @@ Optional local path:
 - Session 04 can also run locally through Ollama's OpenAI-compatible `/v1` endpoint.
 - Sessions 05, 06, and 08 do not require API keys for the included labs and demos.
 - Session 07 core labs run without API keys; the optional generated-answer demo can use `OPENAI_API_KEY`.
+- Session 09 core labs run without API keys; optional hosted fine-tuning examples use `OPENAI_API_KEY`.
 
 ---
 
