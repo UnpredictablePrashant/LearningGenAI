@@ -43,7 +43,7 @@ def main() -> None:
 
     manifest = build_file_manifest("data/train.jsonl", "data/validation.jsonl")
     spec = build_job_spec(
-        base_model="gpt-4.1-mini-2025-04-14",
+        base_model="gpt-4.1-nano-2025-04-14",
         training_file_id="file-train-placeholder",
         validation_file_id="file-valid-placeholder",
         suffix="ticket-router-v1",
@@ -58,4 +58,3 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
-

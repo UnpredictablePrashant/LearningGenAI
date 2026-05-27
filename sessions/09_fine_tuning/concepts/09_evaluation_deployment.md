@@ -3,15 +3,31 @@
 Fine-tuning without evals is guessing. You need a baseline before training and a
 gate before deployment.
 
+The question is not:
+
+```text
+Did the training job finish?
+```
+
+The question is:
+
+```text
+Does the fine-tuned model perform better than the baseline on examples it did
+not train on?
+```
+
 ## Eval Sets
 
 Use three splits:
 
 - Training set: used for learning
 - Validation set: used during training and iteration
-- Holdout set: used only for final evaluation
+- Holdout test set: used only for final evaluation
 
 Never tune repeatedly against the holdout set. It stops being a true holdout.
+
+Analogy: if a student practices the exact final exam questions, the score no
+longer measures general understanding.
 
 ## Baseline
 
@@ -39,6 +55,78 @@ Choose metrics by task:
 
 Do not use one metric for every task.
 
+## Basic Classification Math
+
+For a label like `billing`:
+
+```text
+precision = correct billing predictions / all billing predictions
+recall    = correct billing predictions / all actual billing examples
+```
+
+Example:
+
+```text
+The model predicted billing 10 times.
+8 were actually billing.
+There were 12 billing examples in the test set.
+
+precision = 8 / 10 = 0.80
+recall    = 8 / 12 = 0.67
+```
+
+Precision answers: "When the model says billing, how often is it right?"
+
+Recall answers: "Of all real billing cases, how many did the model catch?"
+
+## Confusion Matrix
+
+A confusion matrix shows which labels are being mixed up.
+
+```text
+expected \ predicted | billing | security | unknown
+billing              |    8    |    1     |   3
+security             |    0    |   11     |   1
+unknown              |    2    |    0     |   6
+```
+
+This is more useful than accuracy alone. If billing and unknown are confused,
+you improve examples and label rules around ambiguous billing tickets.
+
+## Tiny Eval Harness
+
+```python
+import json
+
+def exact_match_score(expected: str, actual: str) -> bool:
+    return expected.strip() == actual.strip()
+
+def evaluate(rows, predict):
+    correct = 0
+    results = []
+
+    for row in rows:
+        actual = predict(row["prompt"])
+        ok = exact_match_score(row["completion"], actual)
+        correct += int(ok)
+        results.append({
+            "prompt": row["prompt"],
+            "expected": row["completion"],
+            "actual": actual,
+            "correct": ok,
+        })
+
+    return {
+        "accuracy": correct / len(rows),
+        "results": results,
+    }
+
+print(json.dumps(evaluate(test_rows, predict), indent=2))
+```
+
+For real projects, add schema validation, label metrics, safety checks, and
+human review where needed.
+
 ## Regression Tests
 
 Create regression cases:
@@ -62,7 +150,7 @@ Treat fine-tuned models like deployable artifacts:
 3. Store eval version and scores.
 4. Deploy to staging.
 5. Run shadow traffic or offline replay.
-6. Canary small percentage.
+6. Canary a small percentage.
 7. Monitor metrics and costs.
 8. Roll back on regression.
 
@@ -82,10 +170,25 @@ Track:
 
 If production inputs drift, the fine-tuned model may degrade.
 
+## Deployment Gate
+
+Before deployment, require:
+
+- Holdout score beats baseline.
+- JSON/schema validity meets threshold.
+- Safety eval does not regress.
+- Latency and cost are acceptable.
+- Rollback config is ready.
+- Owner approves the model version.
+
+The exact thresholds depend on the application. A customer-facing support tool
+needs stricter gates than an internal learning demo.
+
 ## Key Takeaways
 
 1. Build evals before training.
 2. Compare against a real baseline.
 3. Use task-specific metrics.
-4. Deploy gradually with rollback.
-5. Monitor drift and regressions.
+4. Keep the holdout test set clean.
+5. Deploy gradually with rollback.
+6. Monitor drift and regressions.

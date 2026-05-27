@@ -135,6 +135,44 @@ They mean the model contains about 7 billion learned numbers.
 
 These numbers are what training changes.
 
+## Tiny Calculation: One Score
+
+Real LLMs contain huge matrix operations, but the idea starts with a small
+calculation:
+
+```text
+score = weight_1 * signal_1 + weight_2 * signal_2 + bias
+```
+
+Imagine a tiny classifier for whether a ticket is about billing:
+
+```text
+signal_1 = mentions "invoice" -> 1
+signal_2 = mentions "latency" -> 1
+
+weight_1 = 2.5
+weight_2 = -1.0
+bias = -0.5
+```
+
+If the text says "invoice issue":
+
+```text
+score = 2.5 * 1 + (-1.0 * 0) + (-0.5) = 2.0
+```
+
+That positive score pushes the model toward billing. If the text says "latency
+issue":
+
+```text
+score = 2.5 * 0 + (-1.0 * 1) + (-0.5) = -1.5
+```
+
+That negative score pushes the model away from billing.
+
+An LLM does not use such simple keyword signals, but it still combines learned
+numbers with internal signals to produce scores.
+
 ## What Does a Layer Do?
 
 An LLM has many layers. Each layer transforms the representation of the input.
@@ -233,6 +271,24 @@ banana:    0.03
 The model can then choose a token. Temperature and sampling settings affect how
 deterministic that choice is.
 
+## Tiny Softmax Example
+
+You do not need to memorize the formula, but it helps to see the shape:
+
+```python
+import math
+
+logits = {"cluster": 4.2, "node": 3.5, "banana": -1.2}
+total = sum(math.exp(value) for value in logits.values())
+probs = {token: math.exp(value) / total for token, value in logits.items()}
+
+print(probs)
+```
+
+Higher logits become higher probabilities, but every probability still sums to
+1. Training tries to increase the probability of the correct next token in the
+training example.
+
 ## What Is Inference?
 
 Inference is using a trained model to produce an output.
@@ -268,6 +324,23 @@ Building a new container image.
 
 Training produces a modified artifact. Inference runs that artifact.
 
+## What Training Is Not
+
+Training is not a normal database write.
+
+If you add one row saying:
+
+```text
+The office Wi-Fi password is example123.
+```
+
+the model does not create a neat lookup table called `wifi_password`. Instead,
+the training process nudges many numbers based on the tokens in that example.
+This is why fine-tuning is a poor fit for frequently changing private facts.
+
+Use fine-tuning for repeated behavior. Use retrieval or tools for facts and
+actions.
+
 ## What Is Fine-Tuning?
 
 Fine-tuning is training that starts from an existing pretrained model instead of
@@ -279,6 +352,25 @@ pretrained base model + task examples -> fine-tuned model
 
 The base model already knows general language. Fine-tuning adjusts behavior for
 your specific task.
+
+## Full Fine-Tuning vs Adapter Fine-Tuning
+
+There are two common ways to change behavior:
+
+```text
+Full fine-tuning: update many or all base model weights
+Adapter tuning: freeze base model, train small adapter weights
+```
+
+Hosted fine-tuning often hides these implementation details. Local workflows
+make them visible. LoRA and QLoRA are adapter-based approaches.
+
+Adapter analogy:
+
+```text
+Full fine-tuning = rebuild the machine
+LoRA adapter = attach a small control module to steer the machine
+```
 
 ## What Is Loss?
 
@@ -316,6 +408,23 @@ This weight made the answer better. Move it up.
 ```
 
 The optimizer applies many tiny updates across many examples.
+
+## A Training Loop in Plain Python Shape
+
+This is not real LLM training code, but it shows the control flow:
+
+```python
+for epoch in range(number_of_epochs):
+    for example in training_examples:
+        prediction = model(example["prompt"])
+        loss = compare(prediction, example["target"])
+        gradients = calculate_gradients(loss)
+        optimizer.apply_updates(gradients)
+```
+
+The important idea: the model sees examples, computes how wrong it was, and
+updates trainable numbers. In LoRA, the trainable numbers are adapter weights.
+In full fine-tuning, many base model weights can change.
 
 ## What Is a Checkpoint?
 
@@ -391,6 +500,25 @@ Benefits:
 - Lower GPU memory requirements
 - Easier to swap task-specific adapters
 
+## Why Beginners Should Care About These Terms
+
+Fine-tuning tutorials often mention `epochs`, `loss`, `batch size`, `LoRA`,
+`4-bit`, `checkpoint`, and `adapter` quickly. These are not separate mysteries.
+They connect:
+
+```text
+tokens -> logits -> loss -> gradients -> updated weights or adapters -> checkpoint
+```
+
+When a fine-tuned model improves, it is because the training process made the
+target answers more likely. When it fails, the cause is usually one of:
+
+- The examples were unclear.
+- The task needed retrieval or tools, not fine-tuning.
+- The model overfit the examples.
+- The model was too small or trained too little.
+- The evaluation set did not match real usage.
+
 ## Base Model vs Fine-Tuned Model
 
 Base model:
@@ -444,4 +572,3 @@ That means:
 5. Quantization stores numbers with fewer bits to reduce memory.
 6. Fine-tuning starts from a base model and adapts it with examples.
 7. LoRA/QLoRA often train adapters instead of all parameters.
-

@@ -3,6 +3,9 @@
 Training data is the main lever in fine-tuning. Bad examples teach bad behavior.
 More data does not fix unclear data.
 
+A fine-tuning dataset is not just "some rows." It is a specification written as
+examples. If the examples are inconsistent, the model learns inconsistency.
+
 ## Define the Task
 
 A good fine-tuning task definition includes:
@@ -18,17 +21,34 @@ A good fine-tuning task definition includes:
 
 Weak task:
 
-```
+```text
 Make the model better at support.
 ```
 
 Strong task:
 
-```
+```text
 Given a cloud support ticket, classify the issue as networking, compute,
 database, security, billing, or unknown. Return strict JSON with label,
 confidence, and one-sentence rationale. If evidence is insufficient, use unknown.
 ```
+
+The strong version tells labelers, engineers, and the model what success means.
+
+## Analogy: A Marking Scheme
+
+Think about a school exam. If every teacher marks the same answer differently,
+students cannot learn what "correct" means. A dataset works the same way. The
+labeling guide is the marking scheme, and each training example is a marked
+answer.
+
+Before collecting thousands of examples, write down:
+
+- Which labels exist
+- What each label means
+- What to do when two labels seem possible
+- What the output format must be
+- What the model should do when evidence is missing
 
 ## Example Anatomy
 
@@ -44,7 +64,8 @@ For chat-based SFT, one example usually contains messages:
 }
 ```
 
-The assistant message is the target behavior.
+The assistant message is the target behavior. During SFT, the trainer learns to
+make that assistant response more likely for similar inputs.
 
 ## Quality Beats Quantity
 
@@ -57,6 +78,7 @@ Prefer:
 - Consistent labels
 - Human-reviewed outputs
 - Negative/no-answer cases
+- Inputs that look like production traffic
 
 Avoid:
 
@@ -66,6 +88,9 @@ Avoid:
 - Prompt injection text without mitigation labels
 - Outputs with invalid JSON if schema matters
 - Examples that include hidden chain-of-thought
+- Low-quality synthetic examples with no review
+
+One clean, reviewed example can be worth more than many noisy examples.
 
 ## Data Sources
 
@@ -80,7 +105,8 @@ Possible sources:
 - Existing classification datasets
 
 Every source needs governance. Production tickets often contain secrets,
-personal data, or customer-specific facts.
+personal data, customer-specific facts, and internal names that may need
+redaction.
 
 ## Label Consistency
 
@@ -88,18 +114,41 @@ In classification tasks, inconsistent labels are poison.
 
 Example contradiction:
 
-```
+```text
 "S3 AccessDenied" -> security
 "Bucket policy denies GetObject" -> storage
 ```
 
 Maybe both are plausible, but the model needs a policy:
 
-```
+```text
 Access/auth failures are security unless the ticket is about storage durability.
 ```
 
 Write the labeling guide before labeling thousands of rows.
+
+## Balance and Coverage
+
+Dataset balance does not always mean every label has exactly the same count. It
+means the model sees enough examples of every behavior you care about.
+
+For a label set:
+
+```text
+networking, compute, database, security, billing, unknown
+```
+
+check counts:
+
+```python
+from collections import Counter
+
+labels = ["billing", "security", "billing", "unknown"]
+print(Counter(labels))
+```
+
+If `unknown` appears only once, the model may avoid using it. If `billing`
+dominates the dataset, the model may over-predict billing.
 
 ## Edge Cases
 
@@ -129,8 +178,45 @@ Never train on:
 - Internal-only material not allowed for the provider/runtime
 - Test/eval answers that should remain holdout
 
-Also avoid leakage between train and eval sets. If near-duplicate examples appear
-in both, eval scores look better than reality.
+Also avoid leakage between train and eval sets. If near-duplicate examples
+appear in both, eval scores look better than reality.
+
+Simple duplicate check:
+
+```python
+import hashlib
+import json
+
+def fingerprint(record: dict) -> str:
+    text = json.dumps(record, sort_keys=True)
+    return hashlib.sha256(text.encode("utf-8")).hexdigest()
+
+seen = set()
+for record in records:
+    fp = fingerprint(record)
+    if fp in seen:
+        print("duplicate found")
+    seen.add(fp)
+```
+
+For production datasets, also check near-duplicates, not only exact duplicates.
+
+## Train, Validation, and Test Split
+
+Use three sets:
+
+- Train: examples used to update the model
+- Validation: examples used to observe training and tune decisions
+- Test/holdout: examples used only for final evaluation
+
+Common beginner split:
+
+```text
+80% train, 10% validation, 10% test
+```
+
+For very small datasets, you may use fewer test examples, but never evaluate
+only on the training set.
 
 ## Dataset Size
 
@@ -141,7 +227,11 @@ There is no universal number. Practical guidance:
 - 200-1000 examples: often enough for narrow behavior changes
 - 1000+ examples: useful for broader coverage, but quality control matters more
 
-For RFT or preference methods, the required dataset shape and effort differ.
+OpenAI's SFT guidance recommends starting with a relatively small number of
+well-crafted demonstrations, evaluating, and then adding more data if the early
+run shows improvement.
+
+Reference: [OpenAI supervised fine-tuning guide](https://platform.openai.com/docs/guides/supervised-fine-tuning)
 
 ## Key Takeaways
 
@@ -149,4 +239,5 @@ For RFT or preference methods, the required dataset shape and effort differ.
 2. Define the task and rubric before collecting examples.
 3. Include edge cases and refusal cases.
 4. Remove secrets and duplicate leakage.
-5. Improve data before tuning hyperparameters.
+5. Split train, validation, and test data before training.
+6. Improve data before tuning hyperparameters.

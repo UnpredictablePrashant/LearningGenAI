@@ -8,6 +8,11 @@ in production.
 This session is intentionally detailed. The goal is to make fine-tuning feel
 like an engineering workflow rather than a magic training button.
 
+For a complete beginner-friendly project walkthrough, read
+[PROJECT_README.md](PROJECT_README.md). It uses the included number dataset and
+walks through data collection, train/validation/test splitting, OpenAI hosted
+fine-tuning, LoRA, QLoRA, local hardware planning, and AWS EC2 setup.
+
 ## DevOps Analogy
 
 | Fine-Tuning Concept | DevOps Equivalent |
@@ -69,6 +74,7 @@ Recommended previous sessions:
 
 ```
 09_fine_tuning/
+|-- PROJECT_README.md
 |-- concepts/
 |   |-- 01_model_basics_before_fine_tuning.md
 |   |-- 02_what_is_fine_tuning.md
@@ -122,6 +128,9 @@ cat concepts/01_model_basics_before_fine_tuning.md
 cat concepts/02_what_is_fine_tuning.md
 cat concepts/04_training_data_design.md
 
+# Then follow the full project walkthrough
+cat PROJECT_README.md
+
 # Run demos
 python demos/demo_model_basics.py
 python demos/demo_dataset_builder.py
@@ -143,4 +152,5 @@ python labs/lab05_finetune_job_spec/lab.py
 | Concepts | 130 min |
 | 5 labs | 160 min |
 | Demos | 45 min |
-| **Total** | **~5.5 hours** |
+| Full project walkthrough | 2-4 hours without paid training, longer with OpenAI/EC2 runs |
+| **Total** | **~8-10 hours with the walkthrough** |

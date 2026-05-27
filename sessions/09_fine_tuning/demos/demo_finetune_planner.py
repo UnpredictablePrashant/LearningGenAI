@@ -82,7 +82,7 @@ def main() -> None:
 
     plan = build_job_plan(
         task_name="ticket-router",
-        base_model="gpt-4.1-mini-2025-04-14",
+        base_model="gpt-4.1-nano-2025-04-14",
         training_file_id="file-train-placeholder",
         validation_file_id="file-valid-placeholder",
         example_count=420,
@@ -93,4 +93,3 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
-
