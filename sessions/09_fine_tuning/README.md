@@ -53,6 +53,8 @@ fine-tuning, LoRA, QLoRA, local hardware planning, and AWS EC2 setup.
 - [OpenAI reinforcement fine-tuning guide](https://platform.openai.com/docs/guides/reinforcement-fine-tuning)
 - [Hugging Face TRL SFTTrainer docs](https://huggingface.co/docs/trl/main/en/sft_trainer)
 - [Hugging Face PEFT LoRA docs](https://huggingface.co/docs/peft/main/en/developer_guides/lora)
+- [Ollama model import docs](https://docs.ollama.com/import)
+- [Ollama Modelfile reference](https://docs.ollama.com/modelfile)
 
 ## Prerequisites
 
@@ -96,7 +98,21 @@ Recommended previous sessions:
     |-- demo_model_basics.py
     |-- demo_dataset_builder.py
     |-- demo_eval_harness.py
-    `-- demo_finetune_planner.py
+    |-- demo_finetune_planner.py
+    `-- endtoend/
+        |-- docs/
+        |   |-- README.md
+        |   |-- DATASET_GUIDE.md
+        |   |-- EC2_UBUNTU_SETUP.md
+        |   |-- CONFIGURATION_OPTIONS.md
+        |   |-- TRAINING_RUNBOOK.md
+        |   |-- PROMPT_CHECKS.md
+        |   `-- sample_prompts.md
+        |-- datasets/
+        |   `-- machine_maintenance_ollama_instruction_dataset.csv
+        |-- codes/
+        |   `-- finetune_local_05b_llm.py
+        `-- output/
 ```
 
 ## Labs
@@ -117,6 +133,7 @@ Recommended previous sessions:
 | `demo_dataset_builder.py` | Build SFT JSONL records and inspect dataset quality |
 | `demo_eval_harness.py` | Run a small baseline eval before fine-tuning |
 | `demo_finetune_planner.py` | Create a safe fine-tuning job plan without calling an API |
+| `endtoend/codes/finetune_local_05b_llm.py` | Fine-tune `Qwen/Qwen2.5-0.5B-Instruct` on Ubuntu EC2 `g6.xlarge` with QLoRA; dataset, docs, code, and outputs stay under `demos/endtoend` |
 
 ## Quick Start
 
@@ -136,6 +153,15 @@ python demos/demo_model_basics.py
 python demos/demo_dataset_builder.py
 python demos/demo_eval_harness.py
 python demos/demo_finetune_planner.py
+
+# Optional EC2 GPU local 0.5B LLM QLoRA fine-tune.
+# Target: g6.xlarge, 100 GB EBS, roughly 1-2 hours.
+cat demos/endtoend/docs/README.md
+cat demos/endtoend/docs/DATASET_GUIDE.md
+cat demos/endtoend/docs/EC2_UBUNTU_SETUP.md
+cat demos/endtoend/docs/CONFIGURATION_OPTIONS.md
+cat demos/endtoend/docs/TRAINING_RUNBOOK.md
+python demos/endtoend/codes/finetune_local_05b_llm.py
 
 # Work through labs
 python labs/lab01_dataset_design/lab.py
