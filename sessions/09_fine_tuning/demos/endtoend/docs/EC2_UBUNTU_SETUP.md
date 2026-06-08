@@ -27,11 +27,64 @@ Why this works:
 Best option for fewer setup problems:
 
 ```text
-AWS Deep Learning Base GPU AMI or Deep Learning OSS NVIDIA Driver GPU AMI on Ubuntu
+Deep Learning Base OSS Nvidia Driver GPU AMI (Ubuntu 24.04)
 ```
 
-These AMIs usually already include NVIDIA drivers. If you use a plain Ubuntu AMI,
-install and verify the NVIDIA driver before installing PyTorch.
+This AMI is published by AWS Deep Learning AMIs and includes the NVIDIA driver
+stack, CUDA directories, Docker, NVIDIA container tooling, and AWS CLI. AWS
+documents this AMI family as supporting G6 instances, including the `g6.xlarge`
+target used in this demo.
+
+For North Virginia, use this region:
+
+```text
+us-east-1
+```
+
+Do not hardcode an AMI ID from an old note. AMI IDs change by region and release
+date. Get the current AMI ID from AWS at launch time.
+
+### Option A: Find It In The AWS Console
+
+1. Open the EC2 console.
+2. Switch the region to **US East (N. Virginia) us-east-1**.
+3. Choose **Launch instance**.
+4. In **Application and OS Images**, search:
+
+```text
+Deep Learning Base OSS Nvidia Driver GPU AMI (Ubuntu 24.04)
+```
+
+5. Choose the x86_64 AWS-owned image, then select `g6.xlarge`.
+
+### Option B: Get The Latest AMI ID From AWS CLI
+
+Run this in AWS CloudShell or any terminal where AWS CLI credentials are
+configured:
+
+```bash
+aws ssm get-parameter \
+  --region us-east-1 \
+  --name /aws/service/deeplearning/ami/x86_64/base-oss-nvidia-driver-gpu-ubuntu-24.04/latest/ami-id \
+  --query "Parameter.Value" \
+  --output text
+```
+
+Alternative lookup by AMI name:
+
+```bash
+aws ec2 describe-images \
+  --region us-east-1 \
+  --owners amazon \
+  --filters \
+    "Name=name,Values=Deep Learning Base OSS Nvidia Driver GPU AMI (Ubuntu 24.04) ????????" \
+    "Name=state,Values=available" \
+  --query "reverse(sort_by(Images, &CreationDate))[:1].ImageId" \
+  --output text
+```
+
+If you use a plain Ubuntu AMI instead, install and verify the NVIDIA driver
+before installing PyTorch.
 
 ## 1. Connect To EC2
 

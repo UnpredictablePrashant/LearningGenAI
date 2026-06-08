@@ -270,7 +270,7 @@ Use this only to verify installation:
 python sessions/09_fine_tuning/demos/endtoend/codes/finetune_local_05b_llm.py --profile smoke --max-steps 20
 ```
 
-This is not the 1-2 hour teaching run. It is only a quick sanity check.
+It is only a quick sanity check.
 
 ## Resume From A Checkpoint
 
@@ -292,4 +292,4 @@ To clean only this demo's output folder before rerunning:
 python sessions/09_fine_tuning/demos/endtoend/codes/finetune_local_05b_llm.py --clean-output
 ```
 
-The script refuses to clean paths outside `demos/endtoend`.
+Note: The script refuses to clean paths outside `demos/endtoend`.
