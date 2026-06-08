@@ -37,6 +37,14 @@ This repo takes you from "I've used ChatGPT" to "I understand how this works and
 | 07 | [Retrieval-Augmented Generation (RAG)](./sessions/07_retrieval_augmented_generation/) | `pypdf`, `tiktoken`, `sentence-transformers`, `chromadb`, `openai` | Optional | ✅ Available |
 | 08 | [Agent2Agent (A2A) Protocol](./sessions/08_agent2agent_a2a_protocol/) | Python standard library | No | ✅ Available |
 | 09 | [Fine-Tuning LLMs](./sessions/09_fine_tuning/) | Python standard library, `openai` optional | Optional | ✅ Available |
+| 10 | [GenAI Evals and Red Teaming](./sessions/10_genai_evals_red_teaming/) | Python standard library | No | ✅ Available |
+| 11 | [LLMOps and Production GenAI](./sessions/11_llmops_production_genai/) | Python standard library | No | ✅ Available |
+| 12 | [GenAI Security Frameworks](./sessions/12_genai_security_frameworks/) | Python standard library | No | ✅ Available |
+| 13 | [Modern Agent Runtime](./sessions/13_modern_agent_runtime/) | Python standard library | No | ✅ Available |
+| 14 | [Multimodal and Realtime AI](./sessions/14_multimodal_realtime_ai/) | Python standard library | Optional | ✅ Available |
+| 15 | [Open Model Production Serving](./sessions/15_open_model_production_serving/) | Python standard library | No | ✅ Available |
+| 16 | [GenAI Observability](./sessions/16_genai_observability/) | Python standard library | No | ✅ Available |
+| 17 | [AI Governance, Risk, and Compliance](./sessions/17_ai_governance_risk_compliance/) | Python standard library | No | ✅ Available |
 
 ---
 
@@ -108,6 +116,7 @@ Optional local path:
 - Sessions 05, 06, and 08 do not require API keys for the included labs and demos.
 - Session 07 core labs run without API keys; the optional generated-answer demo can use `OPENAI_API_KEY`.
 - Session 09 core labs run without API keys; optional hosted fine-tuning examples use `OPENAI_API_KEY`.
+- Sessions 10-17 core labs run without API keys. Optional extensions can connect to provider APIs, realtime APIs, OpenTelemetry collectors, or GPU model servers.
 
 ---
 
