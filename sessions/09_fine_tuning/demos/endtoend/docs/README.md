@@ -52,6 +52,7 @@ Run using Ollama or another local runtime
 
 ```text
 demos/endtoend/
+|-- requirements.txt
 |-- codes/
 |   `-- finetune_local_05b_llm.py
 |-- datasets/
@@ -84,6 +85,12 @@ demos/endtoend/
 From the repository root:
 
 ```bash
+python -m pip install -r sessions/09_fine_tuning/demos/endtoend/requirements.txt
+```
+
+Then run:
+
+```bash
 python sessions/09_fine_tuning/demos/endtoend/codes/finetune_local_05b_llm.py
 ```
 
@@ -109,6 +116,7 @@ sessions/09_fine_tuning/demos/endtoend/docs/
 
 The most important files are:
 
+- `requirements.txt`
 - `datasets/machine_maintenance_ollama_instruction_dataset.csv`
 - `docs/DATASET_GUIDE.md`
 - `output/local_05b_machine_assistant/adapter/`

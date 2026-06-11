@@ -169,6 +169,21 @@ rows: 4800
 800 examples for each of the 6 recommended_action labels
 ```
 
+## Install Requirements
+
+The EC2 GPU dependencies are maintained in:
+
+```text
+sessions/09_fine_tuning/demos/endtoend/requirements.txt
+```
+
+Install them from the repository root after activating `.venv`:
+
+```bash
+python -m pip install --upgrade pip
+python -m pip install -r sessions/09_fine_tuning/demos/endtoend/requirements.txt
+```
+
 ## Run Full Fine-Tuning
 
 From the repository root:

@@ -100,6 +100,7 @@ Recommended previous sessions:
     |-- demo_eval_harness.py
     |-- demo_finetune_planner.py
     `-- endtoend/
+        |-- requirements.txt
         |-- docs/
         |   |-- README.md
         |   |-- DATASET_GUIDE.md
@@ -161,6 +162,7 @@ cat demos/endtoend/docs/DATASET_GUIDE.md
 cat demos/endtoend/docs/EC2_UBUNTU_SETUP.md
 cat demos/endtoend/docs/CONFIGURATION_OPTIONS.md
 cat demos/endtoend/docs/TRAINING_RUNBOOK.md
+python -m pip install -r demos/endtoend/requirements.txt
 python demos/endtoend/codes/finetune_local_05b_llm.py
 
 # Work through labs

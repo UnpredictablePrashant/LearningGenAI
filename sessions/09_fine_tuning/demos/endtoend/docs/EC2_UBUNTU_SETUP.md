@@ -149,37 +149,38 @@ source .venv/bin/activate
 python -m pip install --upgrade pip
 ```
 
-## 6. Install PyTorch With CUDA
+## 6. Install Fine-Tuning Requirements
 
-The command below uses the CUDA 12.6 wheel channel:
-
-```bash
-pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu126
-```
-
-If this fails because your AMI has a different driver stack, use the official
-PyTorch selector and choose Linux, pip, Python, CUDA:
-
-```text
-https://pytorch.org/get-started/locally/
-```
-
-## 7. Install Fine-Tuning Libraries
+The end-to-end demo maintains its own requirements file:
 
 ```bash
-pip install transformers datasets accelerate peft trl bitsandbytes pandas scikit-learn hf_xet
+sessions/09_fine_tuning/demos/endtoend/requirements.txt
 ```
+
+Install all GPU fine-tuning libraries from that file:
+
+```bash
+python -m pip install -r sessions/09_fine_tuning/demos/endtoend/requirements.txt
+```
+
+The requirements file includes:
+
+- PyTorch, torchvision, and torchaudio from the CUDA 12.6 PyTorch wheel index
+- Transformers, Datasets, Accelerate, PEFT, TRL, bitsandbytes, and Hugging Face download helpers
+- pandas, scikit-learn, numpy, and a compatible `httpx`
 
 If you already installed these packages earlier, upgrade them before a full run:
 
 ```bash
-pip install --upgrade transformers datasets accelerate peft trl bitsandbytes pandas scikit-learn hf_xet
+python -m pip install --upgrade -r sessions/09_fine_tuning/demos/endtoend/requirements.txt
 ```
 
 What these packages do:
 
+- `torch`, `torchvision`, `torchaudio`: CUDA-enabled PyTorch training stack
 - `transformers`: loads the Qwen base model and tokenizer
 - `datasets`: creates train/validation/test datasets
+- `httpx`: HTTP client dependency used by Hugging Face datasets and hub tools
 - `accelerate`: helps Transformers place work on the GPU
 - `peft`: creates and trains LoRA adapters
 - `bitsandbytes`: supports low-memory quantized training modes
@@ -187,7 +188,14 @@ What these packages do:
 - `scikit-learn`: available for simple metrics and utilities
 - `hf_xet`: speeds up Hugging Face downloads for repositories using Xet storage
 
-## 8. Verify Python Can See The GPU
+If PyTorch installation fails because your AMI has a different driver stack,
+use the official PyTorch selector and choose Linux, pip, Python, CUDA:
+
+```text
+https://pytorch.org/get-started/locally/
+```
+
+## 7. Verify Python Can See The GPU
 
 ```bash
 python - <<'PY'
@@ -208,7 +216,7 @@ gpu: NVIDIA L4
 memory GB: about 24
 ```
 
-## 9. Use tmux For The 1-2 Hour Run
+## 8. Use tmux For The 1-2 Hour Run
 
 ```bash
 tmux new -s finetune
@@ -228,7 +236,7 @@ Reconnect:
 tmux attach -t finetune
 ```
 
-## 10. Output Location
+## 9. Output Location
 
 The script keeps demo-generated artifacts under:
 
@@ -257,7 +265,7 @@ libraries:
 
 ```bash
 source .venv/bin/activate
-pip install --upgrade transformers datasets accelerate peft trl bitsandbytes pandas scikit-learn hf_xet
+python -m pip install --upgrade -r sessions/09_fine_tuning/demos/endtoend/requirements.txt
 python sessions/09_fine_tuning/demos/endtoend/codes/finetune_local_05b_llm.py
 ```
 
@@ -269,3 +277,69 @@ TrainingArguments compatibility: skipping unsupported options for this Transform
 
 That means the script detected the older package behavior and continued with
 the supported training settings.
+
+## Troubleshooting: httpx RequestError Import Error
+
+If the run stops before Step 01 with an error like this:
+
+```text
+AttributeError: module 'httpx' has no attribute 'RequestError'
+```
+
+Your virtual environment has an incompatible or broken `httpx` package. Repair
+the venv, verify the import, then rerun:
+
+```bash
+cd ~/LearningGenAI
+source .venv/bin/activate
+
+python -m pip install --upgrade --force-reinstall "httpx>=0.27,<1" datasets huggingface_hub
+
+python - <<'PY'
+import httpx, datasets
+print("httpx:", httpx.__version__, "RequestError:", hasattr(httpx, "RequestError"))
+print("datasets:", datasets.__version__)
+PY
+
+python sessions/09_fine_tuning/demos/endtoend/codes/finetune_local_05b_llm.py
+```
+
+Expected verification:
+
+```text
+RequestError: True
+```
+
+## Troubleshooting: huggingface-hub Version Error
+
+If the run stops before Step 01 with an error like this:
+
+```text
+huggingface-hub>=0.34.0,<1.0 is required ... but found huggingface-hub==1.18.0
+```
+
+Your virtual environment has a `huggingface-hub` 1.x package, but the installed
+Transformers stack for this demo expects `huggingface-hub` below 1.0. Repair the
+venv, then reinstall from the demo requirements file:
+
+```bash
+cd ~/LearningGenAI
+source .venv/bin/activate
+
+python -m pip install --upgrade --force-reinstall "huggingface_hub>=0.34,<1"
+python -m pip install --upgrade -r sessions/09_fine_tuning/demos/endtoend/requirements.txt
+
+python - <<'PY'
+import huggingface_hub, transformers
+print("huggingface_hub:", huggingface_hub.__version__)
+print("transformers:", transformers.__version__)
+PY
+
+python sessions/09_fine_tuning/demos/endtoend/codes/finetune_local_05b_llm.py
+```
+
+Expected verification:
+
+```text
+huggingface_hub: 0.x
+```

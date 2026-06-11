@@ -144,8 +144,7 @@ PyTorch:
     python -m venv .venv
     source .venv/bin/activate
     pip install --upgrade pip
-    pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu126
-    pip install transformers datasets accelerate peft trl bitsandbytes pandas scikit-learn hf_xet
+    pip install -r sessions/09_fine_tuning/demos/endtoend/requirements.txt
 
 Run the full 1-2 hour EC2 GPU example:
 
@@ -490,14 +489,54 @@ def import_training_dependencies() -> dict[str, Any]:
             set_seed,
         )
     except ImportError as exc:
+        error_text = str(exc)
+        if "huggingface-hub" in error_text and "found huggingface-hub" in error_text:
+            raise SystemExit(
+                "\nPython dependency version mismatch.\n\n"
+                "Transformers requires huggingface-hub below 1.0 for this demo, "
+                "but the current virtual environment has a 1.x version installed.\n\n"
+                "Repair the EC2 venv with:\n\n"
+                "    source .venv/bin/activate\n"
+                "    python -m pip install --upgrade --force-reinstall \"huggingface_hub>=0.34,<1\"\n"
+                "    python -m pip install --upgrade -r sessions/09_fine_tuning/demos/endtoend/requirements.txt\n\n"
+                "Then verify and rerun:\n\n"
+                "    python - <<'PY'\n"
+                "    import huggingface_hub, transformers\n"
+                "    print('huggingface_hub:', huggingface_hub.__version__)\n"
+                "    print('transformers:', transformers.__version__)\n"
+                "    PY\n"
+                "    python sessions/09_fine_tuning/demos/endtoend/codes/finetune_local_05b_llm.py\n\n"
+                "Original import error:\n"
+                f"    {exc}\n"
+            ) from exc
         raise SystemExit(
             "\nMissing local LLM fine-tuning dependency.\n\n"
             "Install the required packages on your EC2 GPU machine:\n\n"
-            "    pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu126\n"
-            "    pip install transformers datasets accelerate peft trl bitsandbytes pandas scikit-learn hf_xet\n\n"
+            "    python -m pip install --upgrade pip\n"
+            "    python -m pip install -r sessions/09_fine_tuning/demos/endtoend/requirements.txt\n\n"
             "Original import error:\n"
             f"    {exc}\n"
         ) from exc
+    except AttributeError as exc:
+        if "httpx" in str(exc) and "RequestError" in str(exc):
+            raise SystemExit(
+                "\nPython dependency version mismatch.\n\n"
+                "The Hugging Face datasets package expects httpx.RequestError, "
+                "but the current virtual environment has an incompatible httpx install.\n\n"
+                "Repair the EC2 venv with:\n\n"
+                "    source .venv/bin/activate\n"
+                "    python -m pip install --upgrade --force-reinstall \"httpx>=0.27,<1\" datasets huggingface_hub\n\n"
+                "Then verify and rerun:\n\n"
+                "    python - <<'PY'\n"
+                "    import httpx, datasets\n"
+                "    print('httpx:', httpx.__version__, 'RequestError:', hasattr(httpx, 'RequestError'))\n"
+                "    print('datasets:', datasets.__version__)\n"
+                "    PY\n"
+                "    python sessions/09_fine_tuning/demos/endtoend/codes/finetune_local_05b_llm.py\n\n"
+                "Original import error:\n"
+                f"    {exc}\n"
+            ) from exc
+        raise
 
     return {
         "pd": pd,

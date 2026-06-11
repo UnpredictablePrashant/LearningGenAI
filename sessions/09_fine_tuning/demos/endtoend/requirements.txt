@@ -1,0 +1,36 @@
+# End-to-end local LLM fine-tuning requirements
+#
+# Target environment:
+# - Ubuntu on AWS EC2 g6.xlarge
+# - NVIDIA L4 GPU
+# - Python 3.10-3.12 virtual environment
+#
+# Install from the repository root with:
+#
+#   python -m pip install --upgrade pip
+#   python -m pip install -r sessions/09_fine_tuning/demos/endtoend/requirements.txt
+#
+# PyTorch CUDA wheels are resolved from the extra PyTorch index below.
+--extra-index-url https://download.pytorch.org/whl/cu126
+
+torch>=2.6,<3
+torchvision>=0.21,<1
+torchaudio>=2.6,<3
+
+# Hugging Face local LLM training stack.
+transformers>=4.45,<5
+datasets>=2.20,<4
+accelerate>=0.33,<2
+peft>=0.12,<1
+trl>=0.9,<1
+bitsandbytes>=0.43,<1
+huggingface_hub>=0.34,<1
+hf_xet>=1.0,<2
+
+# Data and evaluation helpers.
+pandas>=2.2,<3
+scikit-learn>=1.5,<2
+numpy>=1.26,<3
+
+# Keep httpx explicit because mismatched versions can break datasets imports.
+httpx>=0.27,<1

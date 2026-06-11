@@ -97,6 +97,12 @@ Dataset folder:
 sessions/09_fine_tuning/demos/endtoend/datasets/
 ```
 
+Requirements file:
+
+```text
+sessions/09_fine_tuning/demos/endtoend/requirements.txt
+```
+
 Code folder:
 
 ```text
