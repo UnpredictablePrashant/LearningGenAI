@@ -811,11 +811,32 @@ def tokenize_for_sft(tokenizer: Any, row: dict[str, Any], max_length: int) -> di
 
 
 def training_arguments_compat(TrainingArguments: Any, **kwargs: Any) -> Any:
-    """Create TrainingArguments across old/new Transformers versions."""
+    """Create TrainingArguments across old/new Transformers versions.
+
+    Transformers changes TrainingArguments names across releases. For example,
+    newer releases use eval_strategy while older releases use
+    evaluation_strategy. Some releases also omit convenience flags such as
+    group_by_length. This helper keeps the EC2 demo runnable by using the
+    options supported by the installed version and printing anything skipped.
+    """
 
     signature = inspect.signature(TrainingArguments.__init__)
-    if "eval_strategy" in signature.parameters:
+    parameters = signature.parameters
+    accepts_kwargs = any(param.kind == inspect.Parameter.VAR_KEYWORD for param in parameters.values())
+
+    if "evaluation_strategy" in kwargs and "eval_strategy" in parameters:
         kwargs["eval_strategy"] = kwargs.pop("evaluation_strategy")
+
+    if not accepts_kwargs:
+        supported_keys = set(parameters) - {"self"}
+        unsupported_keys = sorted(key for key in kwargs if key not in supported_keys)
+        if unsupported_keys:
+            print(
+                "TrainingArguments compatibility: skipping unsupported options "
+                f"for this Transformers version: {', '.join(unsupported_keys)}"
+            )
+        kwargs = {key: value for key, value in kwargs.items() if key in supported_keys}
+
     return TrainingArguments(**kwargs)
 
 

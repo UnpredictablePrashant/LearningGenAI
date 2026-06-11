@@ -170,6 +170,12 @@ https://pytorch.org/get-started/locally/
 pip install transformers datasets accelerate peft trl bitsandbytes pandas scikit-learn hf_xet
 ```
 
+If you already installed these packages earlier, upgrade them before a full run:
+
+```bash
+pip install --upgrade transformers datasets accelerate peft trl bitsandbytes pandas scikit-learn hf_xet
+```
+
 What these packages do:
 
 - `transformers`: loads the Qwen base model and tokenizer
@@ -235,3 +241,31 @@ The script keeps Markdown docs and prompt handouts under:
 ```text
 sessions/09_fine_tuning/demos/endtoend/docs/
 ```
+
+## Troubleshooting: TrainingArguments Keyword Error
+
+If the run stops with an error like this:
+
+```text
+TypeError: TrainingArguments.__init__() got an unexpected keyword argument 'group_by_length'
+```
+
+Your installed `transformers` package does not support every option used by the
+training script. Use the latest version of this script, which skips unsupported
+`TrainingArguments` options automatically. You can also upgrade the fine-tuning
+libraries:
+
+```bash
+source .venv/bin/activate
+pip install --upgrade transformers datasets accelerate peft trl bitsandbytes pandas scikit-learn hf_xet
+python sessions/09_fine_tuning/demos/endtoend/codes/finetune_local_05b_llm.py
+```
+
+After the script fix, seeing a message like this is okay:
+
+```text
+TrainingArguments compatibility: skipping unsupported options for this Transformers version: group_by_length
+```
+
+That means the script detected the older package behavior and continued with
+the supported training settings.
